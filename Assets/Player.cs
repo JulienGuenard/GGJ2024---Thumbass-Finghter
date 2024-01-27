@@ -40,7 +40,7 @@ public partial class @Player: IInputActionCollection2, IDisposable
                     ""name"": ""JoystickLeft"",
                     ""type"": ""Value"",
                     ""id"": ""d17bd2f9-2d59-4d4a-ab0b-2b20addbfbf8"",
-                    ""expectedControlType"": ""Stick"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -49,7 +49,7 @@ public partial class @Player: IInputActionCollection2, IDisposable
                     ""name"": ""JoystickRight"",
                     ""type"": ""Value"",
                     ""id"": ""5a0624c0-a942-4b21-a9a3-b8904aee980b"",
-                    ""expectedControlType"": ""Stick"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true

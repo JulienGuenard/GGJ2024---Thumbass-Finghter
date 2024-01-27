@@ -1,10 +1,14 @@
+using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class SelectionManager : MonoBehaviour
 {
+    public Player actions;
+
     public Fade fade;
     public List<Image> Fighters = new List<Image>(3);
     public Image P1Fighter;
@@ -35,59 +39,111 @@ public class SelectionManager : MonoBehaviour
                 p2Selected = 2;
         }
     }
+
+    private int p1Locked;
+    private int p2Locked;
     // Start is called before the first frame update
     void Awake()
     {
         fade.Out();
+        actions = new Player();
+
+        actions.Pouce.JoystickLeft.performed += P1Input;
+        actions.Pouce.JoystickLeft.canceled += P1Input;
+
+        actions.Pouce.JoystickRight.performed += P2Input;
+        actions.Pouce.JoystickRight.canceled += P2Input;
+
+        p1Locked = -2;
+        p2Locked = -2;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        P1Fighter.color = Fighters[0].color;
+        P2Fighter.color = Fighters[0].color;
+    }
+
+    bool waitForDrop1 = false;
+    public void P1Input(InputAction.CallbackContext context)
+    {
+        if (p1Locked == -2)
         {
-            P1Right();
-            Debug.Log($"P1 : New value = {P1Selected}");
+            if (context.ReadValue<Vector2>().y < -.6f && !waitForDrop1)
+            {
+                waitForDrop1 = true;
+
+                P1Selected++;
+                if (P1Selected == p2Locked)
+                    P1Selected++;
+            }
+            if (context.ReadValue<Vector2>().y > .6f && !waitForDrop1)
+            {
+                waitForDrop1 = true;
+
+                P1Selected--;
+                if (P1Selected == p2Locked)
+                    P1Selected--;
+            }
+
+            if (context.ReadValue<Vector2>().x < -.6f)
+                p1Locked = P1Selected;
+
+            P1Fighter.color = Fighters[P1Selected].color;
+            Debug.Log(context.ReadValue<Vector2>().y);
+
+            if (context.canceled)
+                waitForDrop1 = false;
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+
+        if (context.ReadValue<Vector2>().x > .6f)
+            p1Locked = -2;
+    }
+
+    bool waitForDrop2 = false;
+    public void P2Input(InputAction.CallbackContext context)
+    {
+        if (p2Locked == -2)
         {
-            P1Left();
-            Debug.Log($"P1 : New value = {P1Selected}");
+            if (context.ReadValue<Vector2>().y > .6f && !waitForDrop2)
+            {
+                waitForDrop2 = true;
+
+                P2Selected++;
+                if (P2Selected == p1Locked)
+                    P2Selected++;
+            }
+            if (context.ReadValue<Vector2>().y < -.6f && !waitForDrop2)
+            {
+                waitForDrop2 = true;
+
+                P2Selected--;
+                if (P2Selected == p1Locked)
+                    P2Selected--;
+            }
+
+            if (context.ReadValue<Vector2>().x > .6f)
+                p2Locked = P2Selected;
+
+            P2Fighter.color = Fighters[P2Selected].color;
+            Debug.Log(context.ReadValue<Vector2>().y);
+
+            if (context.canceled)
+                waitForDrop2 = false;
         }
-        
-        P1Fighter.color = Fighters[P1Selected].color;
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            P2Right();
-            Debug.Log($"P2 : New value = {P2Selected}");
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            P2Left();
-            Debug.Log($"P2 : New value = {P2Selected}");
-        }
-
-        P2Fighter.color = Fighters[P2Selected].color;
+        if (context.ReadValue<Vector2>().x < -.6f)
+            p2Locked = -2;
     }
 
-    public void P1Right()
+    private void OnEnable()
     {
-        P1Selected++;
+        actions.Pouce.Enable();
     }
 
-    public void P1Left()
+    private void OnDisable()
     {
-        P1Selected--;
-    }
-
-    public void P2Right()
-    {
-        P2Selected++;
-    }
-
-    public void P2Left()
-    {
-        P2Selected--;
+        actions.Pouce.JoystickLeft.performed -= P1Input;
+        actions.Pouce.JoystickLeft.canceled -= P1Input;
     }
 }
