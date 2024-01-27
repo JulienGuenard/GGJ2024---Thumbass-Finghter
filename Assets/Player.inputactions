@@ -1,0 +1,134 @@
+{
+    "name": "Player",
+    "maps": [
+        {
+            "name": "Pouce",
+            "id": "2b0e3068-1f9a-45fa-8e6c-cf40d5e8d3c0",
+            "actions": [
+                {
+                    "name": "DPadRight",
+                    "type": "Button",
+                    "id": "6a712d09-367c-4de0-8b1e-0533cd5492d2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "JoystickLeft",
+                    "type": "Value",
+                    "id": "d17bd2f9-2d59-4d4a-ab0b-2b20addbfbf8",
+                    "expectedControlType": "Stick",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "JoystickRight",
+                    "type": "Value",
+                    "id": "5a0624c0-a942-4b21-a9a3-b8904aee980b",
+                    "expectedControlType": "Stick",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LT",
+                    "type": "Button",
+                    "id": "432f2e01-90f4-4ef6-9066-619546beebb7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "X",
+                    "type": "Button",
+                    "id": "7e8c6f99-a773-4688-bacd-b3d2584a570a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RT",
+                    "type": "Button",
+                    "id": "53887618-8b9f-4130-95be-a7b5881e660f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "657fe7dd-ad59-42a3-984f-7afa61801a7e",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DPadRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "614e72e6-77b5-4372-a6c4-815a9f251593",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "JoystickLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "af027dc4-d528-4088-a4cf-c999f52c23ef",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "JoystickRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b4eabc74-fc22-4c1e-a029-52246e21f173",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LT",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "edd50394-131c-4b06-81b9-52115e2c5c11",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "X",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9533b2c6-1ad3-47a9-a105-877d92f3a88c",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RT",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
