@@ -1,87 +1,87 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PouceInput : MonoBehaviour
 {
-    [SerializeField] private InputAction inputAction_DPad;
+    [Header("Input")]
+    [SerializeField] private Player player;
+    [SerializeField] private InputAction inputAction;
 
-    private bool isTackling = false;
-    private bool canChangeHeight;
-    private bool canTackle = true;
-
+    [Header("Tackle")]
     [SerializeField] private float isTacklingCD;
     [SerializeField] private float changeHeightDuration;
-    private float changeHeightDurationActual;
+    private bool isTackling = false;
+    private bool canTackle = true;
+
+    [Header("Change Height")]
     [SerializeField] private float changeHeightCD;
+    private float changeHeightDurationActual;
+    private bool canChangeHeight = true;
 
-    Animator animator;
+    private Animator animator;
 
-    void Start()
+    private void Awake()
     {
         animator = GetComponent<Animator>();
+        player = new Player();
+
+        inputAction = player.Pouce.DPadRight;
+        inputAction.Enable();
+
+        inputAction.started += DPad_Right;
+        inputAction.performed += DPad_Right;
+        inputAction.canceled += DPad_Right;
+
         changeHeightDurationActual = 0;
     }
 
-    void Update()
+    private void Update()
     {
-        inputAction_DPad.Enable();
-        inputAction_DPad.started += context => Debug.Log($"{context.action} started");
-        inputAction_DPad.performed += context => Debug.Log($"{context.action} performed");
-        inputAction_DPad.canceled += context => Debug.Log($"{context.action} canceled");
-
-        return;
-        if (Input.GetAxis("DPad-Horizontal") > 0)   Tackle();
-        if (Input.GetAxis("Horizontal") > 0)        Rotate();
-        if (Input.GetAxis("DPad-Vertical") > 0)     ChangeHeight(true);
-        else                                        ChangeHeight(false);
+        ChangeHeight_Duration();
     }
 
-    void Tackle()
+    private void ChangeHeight_Duration()
     {
-        if (!canTackle) return;
-
-        isTackling = true;
-        animator.SetBool("isTackling", true);
-        StartCoroutine(TackleCD());
+        if (canTackle)                                          changeHeightDurationActual += 0.01f;
+        if (changeHeightDurationActual <= 0)                    return;
+        if (!canTackle)                                         changeHeightDurationActual -= 0.01f;
+        if (changeHeightDurationActual >= changeHeightDuration) StartCoroutine(ChangeHeightCD());
     }
 
-    void Rotate()
+    private void DPad_Right(InputAction.CallbackContext context)
     {
-
+        if (context.started)    ChangeHeight(true);
+        if (context.canceled)   ChangeHeight(false);
     }
 
-    void ChangeHeight(bool isChanging)
+    private void ChangeHeight(bool isChanging)
     {
-       // Debug.Log(Input.GetAxis("DPad-Vertical"));
-
         if (isChanging && canChangeHeight)
         {
             transform.position = new Vector3(transform.position.x, 1, 0);
-            changeHeightDurationActual += 0.01f;
             canTackle = true;
         }  
         else
         {
             transform.position = new Vector3(transform.position.x, 0, 0);
-            changeHeightDurationActual -= 0.01f;
             canTackle = false;
         }
-
-        if (changeHeightDurationActual >= changeHeightDuration) StartCoroutine(ChangeHeightCD());
     }
 
-    IEnumerator TackleCD()
+    private IEnumerator TackleCD()
     {
         yield return new WaitForSeconds(isTacklingCD);
         isTackling = false;
         animator.SetBool("isTackling", false);
     }
 
-    IEnumerator ChangeHeightCD()
+    private IEnumerator ChangeHeightCD()
     {
         changeHeightDurationActual = 0;
+        ChangeHeight(false);
         canChangeHeight = false;
         yield return new WaitForSeconds(changeHeightCD);
         canChangeHeight = true;

@@ -131,6 +131,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1945503712278030847, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
+      propertyPath: inputAction.m_Id
+      value: a7c5b401-9846-46ee-b5c3-585144695abc
+      objectReference: {fileID: 0}
+    - target: {fileID: 1945503712278030847, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
+      propertyPath: inputAction.m_Name
+      value: Input
+      objectReference: {fileID: 0}
+    - target: {fileID: 1945503712278030847, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
+      propertyPath: inputAction_DPad.m_Id
+      value: 960ba0d1-fa5e-4304-8998-173a815f3be6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1945503712278030847, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
+      propertyPath: inputAction_DPad.m_Name
+      value: Input Action_D Pad
+      objectReference: {fileID: 0}
     - target: {fileID: 7111634408552812395, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
       propertyPath: m_Name
       value: Pouce-P2
@@ -386,6 +402,72 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1002877067
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1002877069}
+  - component: {fileID: 1002877068}
+  m_Layer: 0
+  m_Name: Script
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1002877068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002877067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 509c8a6af246ab44d81d7b772c6f26f8, type: 3}
+  m_NotificationBehavior: 3
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6a712d09-367c-4de0-8b1e-0533cd5492d2
+    m_ActionName: Pouce/DPad[/XInputControllerWindows/dpad]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Pouce
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 963194227}
+--- !u!4 &1002877069
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002877067}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &630702807958075383
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -394,6 +476,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1945503712278030847, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
+      propertyPath: playerInput
+      value: 
+      objectReference: {fileID: 1002877068}
+    - target: {fileID: 1945503712278030847, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
+      propertyPath: inputAction.m_Id
+      value: 72d15831-03e3-4b90-96c2-566c6e25ae16
+      objectReference: {fileID: 0}
+    - target: {fileID: 1945503712278030847, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
+      propertyPath: inputAction_DPad
+      value: 
+      objectReference: {fileID: 1002877068}
+    - target: {fileID: 1945503712278030847, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
+      propertyPath: inputAction.m_Name
+      value: Input
+      objectReference: {fileID: 0}
     - target: {fileID: 1945503712278030847, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
       propertyPath: inputAction_DPad.m_Id
       value: ddfa26ec-cc86-41e2-b645-174d23b23f0e
@@ -481,6 +579,14 @@ PrefabInstance:
     - target: {fileID: 1945503712278030847, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
       propertyPath: inputAction_DPad.m_SingletonActionBindings.Array.data[3].m_Action
       value: Input Action_D Pad
+      objectReference: {fileID: 0}
+    - target: {fileID: 3008757081328456352, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
+      propertyPath: m_CullingMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3008757081328456352, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7111634408552812395, guid: 6d67322ec25bc1d4e86bb5f167b24e20, type: 3}
       propertyPath: m_Name
