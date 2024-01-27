@@ -1,0 +1,34 @@
+{
+    "name": "DPad",
+    "maps": [
+        {
+            "name": "DPad",
+            "id": "5de47eea-6175-40a7-92d5-ad1c51a1bd54",
+            "actions": [
+                {
+                    "name": "DPad",
+                    "type": "PassThrough",
+                    "id": "94ec3752-25a1-44f3-9391-b21dfcadda53",
+                    "expectedControlType": "Dpad",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "35cdcffc-a8c2-46fc-99ec-e0309ffef67b",
+                    "path": "<XInputController>/dpad",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DPad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
