@@ -140,17 +140,15 @@ public class PouceInput : MonoBehaviour
 
         Vector2 input = context.ReadValue<Vector2>();
 
-        if (context.canceled) { rigidbody.angularVelocity = Vector3.zero; return; }
-        if (input.y > 0.1f && rotBlockLeft) { rigidbody.angularVelocity = Vector3.zero; return; }
-        if (input.y < 0.1f && rotBlockRight) { rigidbody.angularVelocity = Vector3.zero; return; }
-
         int inversion = 1;
 
         if (isInverted) inversion = -1;
 
+        if (context.canceled) { rigidbody.angularVelocity = Vector3.zero; return; }
+        if (input.y > 0.1f && rotBlockLeft) { rigidbody.angularVelocity = Vector3.zero; return; }
+        if (input.y < 0.1f && rotBlockRight) { rigidbody.angularVelocity = Vector3.zero; return; }
+
         rigidbody.AddRelativeTorque(0, 0, input.y * rotationSpeed);
-
-
     }
 
     private void Joystick_Right(InputAction.CallbackContext context)
@@ -162,6 +160,10 @@ public class PouceInput : MonoBehaviour
         int inversion = 1;
 
         if (isInverted) inversion = -1;
+
+        if (context.canceled) { rigidbody.angularVelocity = Vector3.zero; return; }
+        if (input.y > 0.1f && rotBlockLeft) { rigidbody.angularVelocity = Vector3.zero; return; }
+        if (input.y < 0.1f && rotBlockRight) { rigidbody.angularVelocity = Vector3.zero; return; }
 
         rigidbody.AddRelativeTorque(0, 0, input.y * rotationSpeed);
 
