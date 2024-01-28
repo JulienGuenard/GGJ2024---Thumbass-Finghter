@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PouceP1 : MonoBehaviour
 {
     #region Variables
     public GameObject OtherThumb;
+
+    public GameObject victoryGMB;
 
     [Header("Tackle")]
     [SerializeField] private float isTacklingCD;
@@ -142,9 +145,17 @@ public class PouceP1 : MonoBehaviour
                 if (animator.GetBool("isTackling") && !p.animator.GetBool("isTackling"))
                 {
                     Debug.Log("Left Thumb wins !");
+                    victoryGMB.SetActive(true);
+                    StartCoroutine(RestartDelay());
                 }
             }
         }
+    }
+
+    IEnumerator RestartDelay()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     #endregion
 }
