@@ -14,6 +14,8 @@ public class PouceInput : MonoBehaviour
 
     bool hasStarted = false;
 
+    public List<AudioClip> punchSFXList;
+
     [Header("Input")]
     [SerializeField] public Player player;
     [SerializeField] private bool can_dPad_Right, can_joystickLeft, can_joystickRight, can_btn_LT, can_btn_X, can_btn_RT;
@@ -112,6 +114,8 @@ public class PouceInput : MonoBehaviour
         ChangeHeight_Duration();
         RotationClamp();
         Tackle_Duration();
+
+        rigidbody = GetComponent<Rigidbody>();
 
         if (inputActual.y > -.2f && rotBlockLeft) { rigidbody.angularVelocity = Vector3.zero; return; }
         if (inputActual.y < 0.2f && rotBlockRight) { rigidbody.angularVelocity = Vector3.zero; return; }
@@ -301,12 +305,21 @@ public class PouceInput : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject != collider.gameObject && collision.tag == "Pouce")
+        {
+            MusicManager.instance.audioS_SFX.PlayOneShot(punchSFXList[UnityEngine.Random.Range(0, punchSFXList.Count - 1)]);
+        }
+    }
+
     IEnumerator Restart()
     {
         yield return new WaitForSeconds(0.8f);
         Time.timeScale = 0.1f;
         yield return new WaitForSeconds(2f * Time.timeScale);
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Destroy(this.gameObject);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
     }
 }
