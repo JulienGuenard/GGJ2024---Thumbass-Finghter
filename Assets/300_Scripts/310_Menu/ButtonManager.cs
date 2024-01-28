@@ -21,6 +21,11 @@ public class ButtonManager : MonoBehaviour
 #endif
     }
 
+    public void Options()
+    {
+        Debug.Log("Options");
+    }
+
     public void Credits()
     {
         Debug.Log("Credits");
