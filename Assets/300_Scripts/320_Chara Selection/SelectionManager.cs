@@ -5,9 +5,16 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class SelectionManager : MonoBehaviour
 {
+    public TextMeshProUGUI timer;
+    float timerIntActual = 15f;
+
+    public GameObject selectorLockSprite1;
+    public GameObject selectorLockSprite2;
+
     public Player actions;
 
     public Fade fade;
@@ -65,6 +72,12 @@ public class SelectionManager : MonoBehaviour
         P2Fighter.color = Fighters[0].color;
 
         StartCoroutine(StartAfterDelay());
+        StartCoroutine(TimerCountdown());
+    }
+
+    private void Update()
+    {
+        if (p1Locked == P1Selected && p2Locked == P2Selected) NextScene();
     }
 
     bool waitForDrop1 = false;
@@ -90,9 +103,13 @@ public class SelectionManager : MonoBehaviour
             }
 
             if (context.ReadValue<Vector2>().x < -.6f)
+            {
                 p1Locked = P1Selected;
+                selectorLockSprite1.SetActive(true);
+            }
+                
 
-            P1Fighter.color = Fighters[P1Selected].color;
+            P1Fighter.sprite = Fighters[P1Selected].sprite;
             Debug.Log(context.ReadValue<Vector2>().y);
 
             if (context.canceled)
@@ -126,9 +143,13 @@ public class SelectionManager : MonoBehaviour
             }
 
             if (context.ReadValue<Vector2>().x > .6f)
+            {
                 p2Locked = P2Selected;
+                selectorLockSprite2.SetActive(true);
+            }
+                
 
-            P2Fighter.color = Fighters[P2Selected].color;
+            P2Fighter.sprite = Fighters[P2Selected].sprite;
             Debug.Log(context.ReadValue<Vector2>().y);
 
             if (context.canceled)
@@ -152,7 +173,21 @@ public class SelectionManager : MonoBehaviour
 
     IEnumerator StartAfterDelay()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(15f);
+        NextScene();
+    }
+
+    void NextScene()
+    {
         SceneManager.LoadScene("Thumb Fight");
+    }
+
+    IEnumerator TimerCountdown()
+    {
+        timerIntActual -= 1f;
+        timer.text = timerIntActual.ToString();
+        yield return new WaitForSeconds(1f);
+        if (timerIntActual == 0) NextScene();
+        StartCoroutine(TimerCountdown());
     }
 }
