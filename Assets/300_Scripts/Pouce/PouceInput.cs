@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PouceInput : MonoBehaviour
@@ -11,8 +12,10 @@ public class PouceInput : MonoBehaviour
     #region Variables
     public GameObject victoire;
 
+    bool hasStarted = false;
+
     [Header("Input")]
-    [SerializeField] private Player player;
+    [SerializeField] public Player player;
     [SerializeField] private bool can_dPad_Right, can_joystickLeft, can_joystickRight, can_btn_LT, can_btn_X, can_btn_RT;
     private InputAction dPad_Right, joystickLeft, joystickRight, btn_LT, btn_X, btn_RT;
 
@@ -50,6 +53,7 @@ public class PouceInput : MonoBehaviour
     {
         Awake_Vars();
         Awake_Input();
+        hasStarted = true;
     }
 
     void Awake_Vars()
@@ -118,6 +122,8 @@ public class PouceInput : MonoBehaviour
     // Change Height
     private void DPad_Right(InputAction.CallbackContext context)
     {
+        if (!hasStarted) return;
+
         if (!can_dPad_Right) return;
         if (isTackling) return;
 
@@ -127,6 +133,8 @@ public class PouceInput : MonoBehaviour
 
     private void Btn_X(InputAction.CallbackContext context)
     {
+        if (!hasStarted) return;
+
         if (!can_btn_X) return;
         if (isTackling) return;
 
@@ -137,6 +145,8 @@ public class PouceInput : MonoBehaviour
     // Tackle
     private void Btn_LT(InputAction.CallbackContext context)
     {
+        if (!hasStarted) return;
+
         if (!can_btn_LT) return;
         if (!canTackle) return;
 
@@ -145,6 +155,8 @@ public class PouceInput : MonoBehaviour
 
     private void Btn_RT(InputAction.CallbackContext context)
     {
+        if (!hasStarted) return;
+
         if (!can_btn_RT) return;
         if (!canTackle) return;
 
@@ -154,6 +166,8 @@ public class PouceInput : MonoBehaviour
     // Rotate
     private void Joystick_Left(InputAction.CallbackContext context)
     {
+        if (!hasStarted) return;
+
         if (!can_joystickLeft) return;
 
         Vector2 input = context.ReadValue<Vector2>();
@@ -172,6 +186,8 @@ public class PouceInput : MonoBehaviour
 
     private void Joystick_Right(InputAction.CallbackContext context)
     {
+        if (!hasStarted) return;
+
         if (!can_joystickRight) return;
 
         Vector2 input = context.ReadValue<Vector2>();
@@ -281,6 +297,16 @@ public class PouceInput : MonoBehaviour
             if (collision.GetComponent<PouceInput>().isTackling) return;
 
             victoire.SetActive(true);
+            StartCoroutine(Restart());
         }
+    }
+
+    IEnumerator Restart()
+    {
+        yield return new WaitForSeconds(0.8f);
+        Time.timeScale = 0.1f;
+        yield return new WaitForSeconds(2f * Time.timeScale);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

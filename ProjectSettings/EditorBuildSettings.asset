@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/100_Scenes/Cloackroom.unity
     guid: b0d30f0305a05aa4fb86a894fcc079fc
+  - enabled: 1
+    path: Assets/100_Scenes/Julien/Thumb Fight.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects: {}
