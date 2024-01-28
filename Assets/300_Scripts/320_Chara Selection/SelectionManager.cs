@@ -8,8 +8,6 @@ using UnityEngine.SceneManagement;
 
 public class SelectionManager : MonoBehaviour
 {
-    public Player actions;
-
     public Fade fade;
     public List<Image> Fighters = new List<Image>(3);
     public Image P1Fighter;
@@ -47,13 +45,6 @@ public class SelectionManager : MonoBehaviour
     void Awake()
     {
         fade.Out();
-        actions = new Player();
-
-        actions.Pouce.JoystickLeft.performed += P1Input;
-        actions.Pouce.JoystickLeft.canceled += P1Input;
-
-        actions.Pouce.JoystickRight.performed += P2Input;
-        actions.Pouce.JoystickRight.canceled += P2Input;
 
         p1Locked = -2;
         p2Locked = -2;
@@ -63,8 +54,6 @@ public class SelectionManager : MonoBehaviour
     {
         P1Fighter.color = Fighters[0].color;
         P2Fighter.color = Fighters[0].color;
-
-        StartCoroutine(StartAfterDelay());
     }
 
     bool waitForDrop1 = false;
@@ -137,22 +126,5 @@ public class SelectionManager : MonoBehaviour
 
         if (context.ReadValue<Vector2>().x < -.6f)
             p2Locked = -2;
-    }
-
-    private void OnEnable()
-    {
-        actions.Pouce.Enable();
-    }
-
-    private void OnDisable()
-    {
-        actions.Pouce.JoystickLeft.performed -= P1Input;
-        actions.Pouce.JoystickLeft.canceled -= P1Input;
-    }
-
-    IEnumerator StartAfterDelay()
-    {
-        yield return new WaitForSeconds(5f);
-        SceneManager.LoadScene("Thumb Fight");
     }
 }
