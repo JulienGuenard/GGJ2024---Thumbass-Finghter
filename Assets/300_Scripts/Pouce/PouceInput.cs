@@ -4,37 +4,47 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PouceInput : MonoBehaviour
 {
     #region Variables
+    public GameObject victoire;
+
+    bool hasStarted = false;
+
+    public List<AudioClip> punchSFXList;
+
     [Header("Input")]
-    [SerializeField] private Player player;
+    [SerializeField] public Player player;
     [SerializeField] private bool can_dPad_Right, can_joystickLeft, can_joystickRight, can_btn_LT, can_btn_X, can_btn_RT;
     private InputAction dPad_Right, joystickLeft, joystickRight, btn_LT, btn_X, btn_RT;
 
     [Header("Tackle")]
     [SerializeField] private float isTacklingCD;
-    [SerializeField] private float changeHeightDuration;
-    private bool isTackling = false;
-    private bool canTackle = true;
+    [SerializeField] private float tacklingDuration;
+    private float tacklingDurationActual;
+    public bool isTackling = false;
+    private bool canTackle = false;
 
     [Header("Change Height")]
     [SerializeField] private float changeHeightCD;
+    [SerializeField] private float changeHeightDuration;
     private float changeHeightDurationActual;
     private bool canChangeHeight = true;
 
     [Header("Rotation")]
     [SerializeField] private bool isInverted;
     [SerializeField] private float rotationSpeed;
+    Vector2 inputActual;
 
     bool rotBlockLeft = false;
     bool rotBlockRight = false;
 
     private Animator animator;
     private Rigidbody rigidbody;
+    private BoxCollider collider;
     #endregion
 
     #region Init Methods
@@ -45,12 +55,14 @@ public class PouceInput : MonoBehaviour
     {
         Awake_Vars();
         Awake_Input();
+        hasStarted = true;
     }
 
     void Awake_Vars()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         rigidbody = GetComponent<Rigidbody>();
+        collider = GetComponent<BoxCollider>();
         player = new Player();
 
         changeHeightDurationActual = 0;
@@ -101,6 +113,12 @@ public class PouceInput : MonoBehaviour
     {
         ChangeHeight_Duration();
         RotationClamp();
+        Tackle_Duration();
+
+        rigidbody = GetComponent<Rigidbody>();
+
+        if (inputActual.y > -.2f && rotBlockLeft) { rigidbody.angularVelocity = Vector3.zero; return; }
+        if (inputActual.y < 0.2f && rotBlockRight) { rigidbody.angularVelocity = Vector3.zero; return; }
     }
     #endregion
 
@@ -108,7 +126,10 @@ public class PouceInput : MonoBehaviour
     // Change Height
     private void DPad_Right(InputAction.CallbackContext context)
     {
+        if (!hasStarted) return;
+
         if (!can_dPad_Right) return;
+        if (isTackling) return;
 
         if (context.started)    ChangeHeight(true);
         if (context.canceled)   ChangeHeight(false);
@@ -116,7 +137,10 @@ public class PouceInput : MonoBehaviour
 
     private void Btn_X(InputAction.CallbackContext context)
     {
+        if (!hasStarted) return;
+
         if (!can_btn_X) return;
+        if (isTackling) return;
 
         if (context.started) ChangeHeight(true);
         if (context.canceled) ChangeHeight(false);
@@ -125,49 +149,63 @@ public class PouceInput : MonoBehaviour
     // Tackle
     private void Btn_LT(InputAction.CallbackContext context)
     {
+        if (!hasStarted) return;
+
         if (!can_btn_LT) return;
+        if (!canTackle) return;
+
+        if (context.performed) Tackle();
     }
 
     private void Btn_RT(InputAction.CallbackContext context)
     {
+        if (!hasStarted) return;
+
         if (!can_btn_RT) return;
+        if (!canTackle) return;
+
+        if (context.performed) Tackle();
     }
 
     // Rotate
     private void Joystick_Left(InputAction.CallbackContext context)
     {
+        if (!hasStarted) return;
+
         if (!can_joystickLeft) return;
 
         Vector2 input = context.ReadValue<Vector2>();
+        inputActual = input;
 
         int inversion = 1;
 
         if (isInverted) inversion = -1;
 
         if (context.canceled) { rigidbody.angularVelocity = Vector3.zero; return; }
-        if (input.y > 0.1f && rotBlockLeft) { rigidbody.angularVelocity = Vector3.zero; return; }
-        if (input.y < 0.1f && rotBlockRight) { rigidbody.angularVelocity = Vector3.zero; return; }
+        if (input.y > -.2f && rotBlockLeft) { rigidbody.angularVelocity = Vector3.zero; return; }
+        if (input.y < 0.2f && rotBlockRight) { rigidbody.angularVelocity = Vector3.zero; return; }
 
-        rigidbody.AddRelativeTorque(0, 0, input.y * rotationSpeed);
+        rigidbody.AddRelativeTorque(0, input.y * rotationSpeed * inversion, 0);
     }
 
     private void Joystick_Right(InputAction.CallbackContext context)
     {
+        if (!hasStarted) return;
+
         if (!can_joystickRight) return;
 
         Vector2 input = context.ReadValue<Vector2>();
+        inputActual = input;
 
         int inversion = 1;
 
         if (isInverted) inversion = -1;
 
         if (context.canceled) { rigidbody.angularVelocity = Vector3.zero; return; }
-        if (input.y > 0.1f && rotBlockLeft) { rigidbody.angularVelocity = Vector3.zero; return; }
-        if (input.y < 0.1f && rotBlockRight) { rigidbody.angularVelocity = Vector3.zero; return; }
+        if (input.y > -.2f && rotBlockLeft) { rigidbody.angularVelocity = Vector3.zero; return; }
+        if (input.y < 0.2f && rotBlockRight) { rigidbody.angularVelocity = Vector3.zero; return; }
 
-        rigidbody.AddRelativeTorque(0, 0, input.y * rotationSpeed);
-
-        if (context.canceled) rigidbody.angularVelocity = Vector3.zero;
+        rigidbody.AddRelativeTorque(0, input.y * rotationSpeed * inversion, 0);
     }
 
     #endregion
@@ -177,12 +215,12 @@ public class PouceInput : MonoBehaviour
     {
         if (isChanging && canChangeHeight)
         {
-            transform.position = new Vector3(transform.position.x, 1, transform.position.z);
+            animator.SetBool("isElevated", true);
             canTackle = true;
         }  
         else
         {
-            transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+            animator.SetBool("isElevated", false);
             canTackle = false;
         }
     }
@@ -195,13 +233,6 @@ public class PouceInput : MonoBehaviour
         if (changeHeightDurationActual >= changeHeightDuration) StartCoroutine(ChangeHeightCD());
     }
 
-    private IEnumerator TackleCD()
-    {
-        yield return new WaitForSeconds(isTacklingCD);
-        isTackling = false;
-        animator.SetBool("isTackling", false);
-    }
-
     private IEnumerator ChangeHeightCD()
     {
         changeHeightDurationActual = 0;
@@ -211,13 +242,84 @@ public class PouceInput : MonoBehaviour
         canChangeHeight = true;
     }
 
+    private void Tackle()
+    {
+        if (canTackle)
+        {
+            canTackle = false;
+            animator.SetBool("isTackling", true);
+            isTackling = true;
+        }
+    }
+
+    private void Tackle_Duration()
+    {
+        if (!isTackling) return;
+
+        if (isTackling) tacklingDurationActual += 0.01f;
+        if (tacklingDurationActual <= 0) return;
+        if (!isTackling) tacklingDurationActual -= 0.01f;
+        if (tacklingDurationActual >= changeHeightDuration) StartCoroutine(TackleCD());
+    }
+
+    private IEnumerator TackleCD()
+    {
+        yield return new WaitForSeconds(isTacklingCD);
+        isTackling = false;
+        animator.SetBool("isTackling", false);
+        StartCoroutine(ChangeHeightCD());
+    }
+
     private void RotationClamp()
     {
-        if (transform.rotation.eulerAngles.z > 45 && transform.rotation.eulerAngles.z < 150)    rotBlockLeft = true;
-        else                                                                                    rotBlockLeft = false;
+        if (isInverted)
+        {
+            if (transform.rotation.eulerAngles.y > 45 && transform.rotation.eulerAngles.y < 150) rotBlockRight = true;
+            else rotBlockRight = false;
 
-        if (transform.rotation.eulerAngles.z < 315 && transform.rotation.eulerAngles.z > 150)   rotBlockRight = true;
-        else                                                                                    rotBlockRight = false;
+            if (transform.rotation.eulerAngles.y < 315 && transform.rotation.eulerAngles.y > 150) rotBlockLeft = true;
+            else rotBlockLeft = false;
+        }else
+        {
+            if (transform.rotation.eulerAngles.y > 45 + 180 && transform.rotation.eulerAngles.y < 330) rotBlockLeft = true;
+            else rotBlockLeft = false;
+
+            if (transform.rotation.eulerAngles.y < 135 && transform.rotation.eulerAngles.y > 30) rotBlockRight = true;
+            else rotBlockRight = false;
+        }
+
+
     }
     #endregion
+
+    private void OnTriggerStay(Collider collision)
+    {
+        if (!isTackling) return;
+
+        if (collision.gameObject != collider.gameObject && collision.tag == "Pouce")
+        {
+            if (collision.GetComponent<PouceInput>().isTackling) return;
+
+            victoire.SetActive(true);
+            StartCoroutine(Restart());
+        }
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject != collider.gameObject && collision.tag == "Pouce")
+        {
+            MusicManager.instance.audioS_SFX.PlayOneShot(punchSFXList[UnityEngine.Random.Range(0, punchSFXList.Count - 1)]);
+        }
+    }
+
+    IEnumerator Restart()
+    {
+        yield return new WaitForSeconds(0.8f);
+        Time.timeScale = 0.1f;
+        yield return new WaitForSeconds(2f * Time.timeScale);
+        Time.timeScale = 1f;
+        Destroy(this.gameObject);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+    }
 }

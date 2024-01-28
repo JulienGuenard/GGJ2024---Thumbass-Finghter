@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SelectionManager : MonoBehaviour
 {
@@ -62,6 +63,8 @@ public class SelectionManager : MonoBehaviour
     {
         P1Fighter.color = Fighters[0].color;
         P2Fighter.color = Fighters[0].color;
+
+        StartCoroutine(StartAfterDelay());
     }
 
     bool waitForDrop1 = false;
@@ -145,5 +148,11 @@ public class SelectionManager : MonoBehaviour
     {
         actions.Pouce.JoystickLeft.performed -= P1Input;
         actions.Pouce.JoystickLeft.canceled -= P1Input;
+    }
+
+    IEnumerator StartAfterDelay()
+    {
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene("Thumb Fight");
     }
 }
